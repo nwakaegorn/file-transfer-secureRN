@@ -16,13 +16,19 @@ db.init_app(app)
 # -----------------------------
 # Sensitive File Policy
 # -----------------------------
-SENSITIVE_KEYWORDS = ["confidential", "secret", "restricted", "finance"]
+SENSITIVE_KEYWORDS = [
+    "confidential",
+    "secret",
+    "restricted",
+    "finance"
+]
 
 # -----------------------------
 # Encryption Key Setup
 # -----------------------------
 if not os.path.exists("secret.key"):
     key = Fernet.generate_key()
+
     with open("secret.key", "wb") as key_file:
         key_file.write(key)
 
@@ -32,15 +38,23 @@ with open("secret.key", "rb") as key_file:
 cipher = Fernet(key)
 
 # -----------------------------
-# Create Folders
+# Create Required Folders
 # -----------------------------
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-os.makedirs(app.config['ENCRYPTED_FOLDER'], exist_ok=True)
+os.makedirs(
+    app.config['UPLOAD_FOLDER'],
+    exist_ok=True
+)
+
+os.makedirs(
+    app.config['ENCRYPTED_FOLDER'],
+    exist_ok=True
+)
 
 # -----------------------------
 # Database Initialization
 # -----------------------------
 with app.app_context():
+
     inspector = inspect(db.engine)
 
     if "file_log" not in inspector.get_table_names():
@@ -48,10 +62,12 @@ with app.app_context():
 
     # Create default admin
     if not User.query.filter_by(username="admin").first():
+
         admin = User(
             username="admin",
             password=generate_password_hash("admin123")
         )
+
         db.session.add(admin)
         db.session.commit()
 
@@ -59,18 +75,31 @@ with app.app_context():
 # Utility Functions
 # -----------------------------
 def generate_hashes(data):
+
     sha256 = hashlib.sha256(data).hexdigest()
     md5 = hashlib.md5(data).hexdigest()
+
     return sha256, md5
 
 
 def is_sensitive(filename):
-    return any(keyword.lower() in filename.lower() for keyword in SENSITIVE_KEYWORDS)
+
+    return any(
+        keyword.lower() in filename.lower()
+        for keyword in SENSITIVE_KEYWORDS
+    )
 
 
-def log_event(filename, username, action, status,
-              sha256=None, md5=None,
-              alert=False, message=""):
+def log_event(
+    filename,
+    username,
+    action,
+    status,
+    sha256=None,
+    md5=None,
+    alert=False,
+    message=""
+):
 
     log = FileLog(
         filename=filename,
@@ -89,10 +118,11 @@ def log_event(filename, username, action, status,
     db.session.commit()
 
 # -----------------------------
-# Routes
+# Home Route
 # -----------------------------
 @app.route('/')
 def home():
+
     return redirect(url_for('dashboard'))
 
 # -----------------------------
@@ -108,6 +138,7 @@ def upload():
         return "No file selected"
 
     try:
+
         file_data = file.read()
 
         sha256, md5 = generate_hashes(file_data)
@@ -115,10 +146,13 @@ def upload():
         alert_flag = False
         message = "File uploaded successfully"
 
+        # Detect sensitive filenames
         if is_sensitive(file.filename):
+
             alert_flag = True
             message = "ALERT: Sensitive file upload detected"
 
+        # Encrypt file
         encrypted_data = cipher.encrypt(file_data)
 
         encrypted_path = os.path.join(
@@ -129,6 +163,7 @@ def upload():
         with open(encrypted_path, "wb") as f:
             f.write(encrypted_data)
 
+        # Log event
         log_event(
             file.filename,
             username,
@@ -182,6 +217,7 @@ def download(filename):
         return "File Not Found"
 
     try:
+
         with open(encrypted_path, "rb") as f:
             encrypted_data = f.read()
 
@@ -192,10 +228,13 @@ def download(filename):
         alert_flag = False
         message = "File downloaded successfully"
 
+        # Detect sensitive downloads
         if is_sensitive(filename):
+
             alert_flag = True
             message = "ALERT: Sensitive file download detected"
 
+        # Log event
         log_event(
             filename,
             username,
@@ -207,6 +246,7 @@ def download(filename):
             message
         )
 
+        # Temporary file for sending
         temp_path = os.path.join(
             app.config['UPLOAD_FOLDER'],
             filename
@@ -215,7 +255,10 @@ def download(filename):
         with open(temp_path, "wb") as f:
             f.write(decrypted_data)
 
-        return send_file(temp_path, as_attachment=True)
+        return send_file(
+            temp_path,
+            as_attachment=True
+        )
 
     except Exception as e:
 
@@ -231,7 +274,7 @@ def download(filename):
         return f"Download Failed: {str(e)}"
 
 # -----------------------------
-# Dashboard
+# Dashboard Route
 # -----------------------------
 @app.route('/dashboard')
 def dashboard():
@@ -246,7 +289,7 @@ def dashboard():
     )
 
 # -----------------------------
-# Security Report
+# Security Report API
 # -----------------------------
 @app.route('/security-report')
 def security_report():
@@ -270,7 +313,9 @@ def security_report():
         "Policy Violations": violations,
         "Failed Transfers": failed,
         "Sensitive File Movements": sensitive_transfers,
-        "Generated At": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+        "Generated At": datetime.utcnow().strftime(
+            "%Y-%m-%d %H:%M:%S UTC"
+        )
     }
 
     return jsonify(report)
@@ -278,12 +323,10 @@ def security_report():
 # -----------------------------
 # Run Application
 # -----------------------------
-if __name__ == '__main__':
-
-    port = int(os.environ.get("PORT", 5000))
+if __name__ == "__main__":
 
     app.run(
-        host='0.0.0.0',
-        port=port,
+        host="0.0.0.0",
+        port=5000,
         debug=False
     )
