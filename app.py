@@ -31,7 +31,9 @@ with open("secret.key", "rb") as key_file:
 
 cipher = Fernet(key)
 
-# Create folders if not exist
+# -----------------------------
+# Create Folders
+# -----------------------------
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['ENCRYPTED_FOLDER'], exist_ok=True)
 
@@ -53,7 +55,6 @@ with app.app_context():
         db.session.add(admin)
         db.session.commit()
 
-
 # -----------------------------
 # Utility Functions
 # -----------------------------
@@ -67,7 +68,10 @@ def is_sensitive(filename):
     return any(keyword.lower() in filename.lower() for keyword in SENSITIVE_KEYWORDS)
 
 
-def log_event(filename, username, action, status, sha256=None, md5=None, alert=False, message=""):
+def log_event(filename, username, action, status,
+              sha256=None, md5=None,
+              alert=False, message=""):
+
     log = FileLog(
         filename=filename,
         username=username,
@@ -80,9 +84,9 @@ def log_event(filename, username, action, status, sha256=None, md5=None, alert=F
         alert=alert,
         message=message
     )
+
     db.session.add(log)
     db.session.commit()
-
 
 # -----------------------------
 # Routes
@@ -91,12 +95,12 @@ def log_event(filename, username, action, status, sha256=None, md5=None, alert=F
 def home():
     return redirect(url_for('dashboard'))
 
-
 # -----------------------------
 # Upload Route
 # -----------------------------
 @app.route('/upload', methods=['POST'])
 def upload():
+
     file = request.files.get('file')
     username = "admin"
 
@@ -105,6 +109,7 @@ def upload():
 
     try:
         file_data = file.read()
+
         sha256, md5 = generate_hashes(file_data)
 
         alert_flag = False
@@ -124,22 +129,38 @@ def upload():
         with open(encrypted_path, "wb") as f:
             f.write(encrypted_data)
 
-        log_event(file.filename, username, "upload", "success",
-                  sha256, md5, alert_flag, message)
+        log_event(
+            file.filename,
+            username,
+            "upload",
+            "success",
+            sha256,
+            md5,
+            alert_flag,
+            message
+        )
 
         return redirect(url_for('dashboard'))
 
     except Exception as e:
-        log_event(file.filename, username, "upload", "failure",
-                  alert=True, message=str(e))
-        return f"Upload Failed: {str(e)}"
 
+        log_event(
+            file.filename,
+            username,
+            "upload",
+            "failure",
+            alert=True,
+            message=str(e)
+        )
+
+        return f"Upload Failed: {str(e)}"
 
 # -----------------------------
 # Download Route
 # -----------------------------
 @app.route('/download/<filename>')
 def download(filename):
+
     username = "admin"
 
     encrypted_path = os.path.join(
@@ -148,8 +169,16 @@ def download(filename):
     )
 
     if not os.path.exists(encrypted_path):
-        log_event(filename, username, "download", "failure",
-                  alert=True, message="File not found")
+
+        log_event(
+            filename,
+            username,
+            "download",
+            "failure",
+            alert=True,
+            message="File not found"
+        )
+
         return "File Not Found"
 
     try:
@@ -157,6 +186,7 @@ def download(filename):
             encrypted_data = f.read()
 
         decrypted_data = cipher.decrypt(encrypted_data)
+
         sha256, md5 = generate_hashes(decrypted_data)
 
         alert_flag = False
@@ -166,53 +196,94 @@ def download(filename):
             alert_flag = True
             message = "ALERT: Sensitive file download detected"
 
-        log_event(filename, username, "download", "success",
-                  sha256, md5, alert_flag, message)
+        log_event(
+            filename,
+            username,
+            "download",
+            "success",
+            sha256,
+            md5,
+            alert_flag,
+            message
+        )
 
-        temp_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        temp_path = os.path.join(
+            app.config['UPLOAD_FOLDER'],
+            filename
+        )
+
         with open(temp_path, "wb") as f:
             f.write(decrypted_data)
 
         return send_file(temp_path, as_attachment=True)
 
     except Exception as e:
-        log_event(filename, username, "download", "failure",
-                  alert=True, message=str(e))
-        return f"Download Failed: {str(e)}"
 
+        log_event(
+            filename,
+            username,
+            "download",
+            "failure",
+            alert=True,
+            message=str(e)
+        )
+
+        return f"Download Failed: {str(e)}"
 
 # -----------------------------
 # Dashboard
 # -----------------------------
 @app.route('/dashboard')
 def dashboard():
-    logs = FileLog.query.order_by(FileLog.timestamp.desc()).all()
-    return render_template('dashboard.html', logs=logs)
 
+    logs = FileLog.query.order_by(
+        FileLog.timestamp.desc()
+    ).all()
+
+    return render_template(
+        'dashboard.html',
+        logs=logs
+    )
 
 # -----------------------------
-# Security Report (JSON)
+# Security Report
 # -----------------------------
 @app.route('/security-report')
 def security_report():
+
     total_transfers = FileLog.query.count()
-    violations = FileLog.query.filter_by(alert=True).count()
-    failed = FileLog.query.filter_by(status="failure").count()
-    sensitive_transfers = FileLog.query.filter(FileLog.message.contains("Sensitive")).count()
+
+    violations = FileLog.query.filter_by(
+        alert=True
+    ).count()
+
+    failed = FileLog.query.filter_by(
+        status="failure"
+    ).count()
+
+    sensitive_transfers = FileLog.query.filter(
+        FileLog.message.contains("Sensitive")
+    ).count()
 
     report = {
         "Total Transfers": total_transfers,
         "Policy Violations": violations,
         "Failed Transfers": failed,
         "Sensitive File Movements": sensitive_transfers,
-        "Generated At": datetime.utcnow()
+        "Generated At": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
     }
 
     return jsonify(report)
-
 
 # -----------------------------
 # Run Application
 # -----------------------------
 if __name__ == '__main__':
-    app.run(debug=True)
+
+    port = int(os.environ.get("PORT", 5000))
+
+    app.run(
+        host='0.0.0.0',
+        port=port,
+        debug=False
+    )
