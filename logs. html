@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Logs</title>
+</head>
+<body>
+<h2>All Transfer Logs</h2>
+<table border="1">
+<tr>
+    <th>Filename</th>
+    <th>User</th>
+    <th>Action</th>
+    <th>IP</th>
+    <th>Time</th>
+    <th>Status</th>
+</tr>
+{% for log in logs %}
+<tr>
+    <td>{{ log.filename }}</td>
+    <td>{{ log.username }}</td>
+    <td>{{ log.action }}</td>
+    <td>{{ log.ip_address }}</td>
+    <td>{{ log.timestamp }}</td>
+    <td>{{ log.status }}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

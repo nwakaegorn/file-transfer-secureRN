@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1117f216-d178-4842-bb7c-4770053754be" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="39myLRYbaUIlp3Z5TzUy58pTqxg" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Rita/OneDrive/Desktop/file transfer secure&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-4762d8aabb82-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.173" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1117f216-d178-4842-bb7c-4770053754be" name="Changes" comment="" />
+      <created>1771315487435</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771315487435</updated>
+      <workItem from="1771315488857" duration="4164000" />
+      <workItem from="1771320160730" duration="1333000" />
+      <workItem from="1771321531155" duration="287000" />
+      <workItem from="1771321909117" duration="757000" />
+      <workItem from="1771322963077" duration="69000" />
+      <workItem from="1771324112695" duration="246000" />
+      <workItem from="1771324989522" duration="125000" />
+      <workItem from="1771404794768" duration="95000" />
+      <workItem from="1771404928452" duration="472000" />
+      <workItem from="1771405445323" duration="165000" />
+      <workItem from="1771408291176" duration="204000" />
+      <workItem from="1771410693680" duration="70000" />
+      <workItem from="1771413782245" duration="327000" />
+      <workItem from="1771666485015" duration="1275000" />
+      <workItem from="1771756975015" duration="841000" />
+      <workItem from="1772190663382" duration="46000" />
+      <workItem from="1772278378476" duration="165000" />
+      <workItem from="1772278581929" duration="89000" />
+      <workItem from="1772278891286" duration="49000" />
+      <workItem from="1772279052876" duration="2140000" />
+      <workItem from="1772362359697" duration="449000" />
+      <workItem from="1772363522479" duration="1325000" />
+      <workItem from="1772367333125" duration="248000" />
+      <workItem from="1772367607221" duration="133000" />
+      <workItem from="1772367778584" duration="66000" />
+      <workItem from="1772367870050" duration="2609000" />
+      <workItem from="1772370872681" duration="300000" />
+      <workItem from="1772774188919" duration="25000" />
+      <workItem from="1772774317200" duration="1356000" />
+      <workItem from="1772882125325" duration="1597000" />
+      <workItem from="1773474264425" duration="1177000" />
+      <workItem from="1774019717055" duration="14000" />
+      <workItem from="1774019754220" duration="60000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
