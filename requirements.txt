@@ -1,8 +1,2 @@
-Flask
-Flask-SQLAlchemy
-Flask-JWT-Extended
+streamlit
 cryptography
-Werkzeug
-SQLAlchemy
-gunicorn
-
