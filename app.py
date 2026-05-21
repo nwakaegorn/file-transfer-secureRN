@@ -324,9 +324,4 @@ def security_report():
 # Run Application
 # -----------------------------
 if __name__ == "__main__":
-
-    app.run(
-        host="0.0.0.0",
-        port=5000,
-        debug=False
-    )
+    print("Flask app loaded successfully")
